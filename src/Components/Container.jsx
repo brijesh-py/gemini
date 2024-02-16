@@ -166,7 +166,7 @@ const Single = ({ showTask }) => {
       </div>
       <div
         title="Task Content"
-        className="mt-3 text-slate-300 output overflow-y-scroll h-[65vh]"
+        className="mt-3 text-slate-300 pb-3 output overflow-y-scroll h-[58vh]"
         dangerouslySetInnerHTML={{ __html: showTask.content }}
       ></div>
     </div>
@@ -199,7 +199,7 @@ const Header = ({ toggleSidebarHandler, toggleSidebar, setShowTask }) => {
             Gemini Storage
           </b>
           <small className="mt-0 text-slate-400 font-bold" title="Version 3.5">
-            Version 3.5
+            Version 1.0.0
           </small>
         </div>
         <span
