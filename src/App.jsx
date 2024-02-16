@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Sidebar from "./Components/Sidebar.jsx";
 import Container from "./Components/Container.jsx";
 
@@ -13,6 +13,7 @@ function App() {
 
   const updateLocalStorage = (updatedTasks) => {
     localStorage.setItem("saveTasks", JSON.stringify(updatedTasks));
+    setTasks([...JSON.parse(localStorage.getItem("saveTasks")).reverse()]);
   };
 
   const updateTask = (taskIndex) => {
@@ -21,7 +22,7 @@ function App() {
         if (item.id != taskIndex) return item;
       }
     );
-    setTasks([...updatedTasks]);
+
     updateLocalStorage(updatedTasks);
   };
 
@@ -40,7 +41,8 @@ function App() {
         setTogglerSidebar={setTogglerSidebar}
       />
       <Container
-      toggleSidebar={toggleSidebar}
+        setShowTask={setShowTask}
+        toggleSidebar={toggleSidebar}
         toggleSidebarHandler={toggleSidebarHandler}
         tasks={tasks}
         showTask={showTask}

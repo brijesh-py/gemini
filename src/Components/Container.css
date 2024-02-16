@@ -12,7 +12,7 @@ section .heading {
     height: fit-content;
 }
 
-section .output {
+section {
     margin-top: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     overflow: scroll;
@@ -21,17 +21,24 @@ section .output {
 section .output * {
     margin-top: 10px;
 }
+
 section,
-    .NewTaskContainer {
-        width: 90%;
-        margin: auto;
-    }
+.NewTaskContainer {
+    width: 90%;
+    margin: auto;
+}
+
+::selection {
+    user-select: none;
+}
+
 @media (max-width: 680px) {
     main {
         width: calc(100vw);
         overflow: hidden;
     }
-    .editor{
-        bottom: 60px!important;
+
+    .editor {
+        bottom: 60px !important;
     }
 }

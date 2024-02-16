@@ -1,10 +1,20 @@
 import React from "react";
+import Settings from "./Settings.jsx";
 import "./Sidebar.css";
-import { Link } from "react-router-dom";
 
-const NewTaskButton = () => {
+const NewTaskButton = ({ setShowTask, setTogglerSidebar, toggleSidebar }) => {
+  const toggle = () => {
+    setTogglerSidebar(!toggleSidebar);
+  };
   return (
-    <div className="p-2 text-slate-200 justify-between flex items-center cursor-pointer hover:bg-slate-800 hover:shadow mt-3 w-[90%] mx-auto rounded">
+    <div
+      title="New Task"
+      onClick={() => {
+        toggleSidebar && toggle();
+        setShowTask([]);
+      }}
+      className="p-2 border border-slate-900 hover:border-slate-500 text-slate-200 justify-between flex items-center cursor-pointer hover:bg-slate-700 hover:shadow-xl bg-slate-800 mt-3 w-[90%] mx-auto rounded"
+    >
       <div className="flex items-center">
         <span className="text-2xl me-1">
           <ion-icon name="flower-outline"></ion-icon>
@@ -27,11 +37,10 @@ const Tasks = ({
 }) => {
   const toggle = () => {
     setTogglerSidebar(!toggleSidebar);
-    // console.log(toggleSidebar)
   };
   let time = "";
   return (
-    <ul className="list-none">
+    <ul className="list-none mt-3 h-[75vh] overflow-scroll">
       {tasks.map((task, index) => (
         <React.Fragment key={index}>
           {task.time !== time && (
@@ -55,7 +64,7 @@ const Tasks = ({
             <span
               onClick={() => {
                 setShowTask(task);
-                toggle();
+                toggleSidebar && toggle();
               }}
               className="text-[14px] w-full capitalize"
             >
@@ -96,10 +105,11 @@ const Sidebar = ({
       className="bg-slate-900 shadow-lg border-r border-slate-700"
       style={{ left: toggleSidebar ? "0" : "-100%" }}
     >
-      {/* <span className="text-2xl text-slate-300 cursor-pointer hover:text-slate-400 absolute top-5" style={{right:"-9px"}}>
-        <ion-icon name="close-outline"></ion-icon>
-      </span> */}
-      <NewTaskButton />
+      <NewTaskButton
+        toggleSidebar={toggleSidebar}
+        setTogglerSidebar={setTogglerSidebar}
+        setShowTask={setShowTask}
+      />
       <Tasks
         toggleSidebar={toggleSidebar}
         setTogglerSidebar={setTogglerSidebar}
@@ -108,6 +118,7 @@ const Sidebar = ({
         tasks={tasks}
         setShowTask={setShowTask}
       />
+      <Settings />
     </aside>
   );
 };

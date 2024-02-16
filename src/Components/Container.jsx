@@ -1,5 +1,6 @@
 import "./Container.css";
-import React, { useState, useEffect, useId } from "react";
+import React, { useState, useEffect } from "react";
+import Default from "./Default.jsx";
 
 const Editor = ({ toggler, setContent }) => {
   return (
@@ -10,12 +11,11 @@ const Editor = ({ toggler, setContent }) => {
       onInput={(e) => {
         setContent(e.target.innerHTML);
       }}
-    >
-    </div>
+    ></div>
   );
 };
 
-const NewTaskContainer = ({ setTasks, tasks }) => {
+const NewTaskContainer = ({ setTasks, tasks, inputRef }) => {
   const [toggler, setToggler] = useState("hidden");
   const [input, setInput] = useState("");
   const [content, setContent] = useState("");
@@ -79,13 +79,19 @@ const NewTaskContainer = ({ setTasks, tasks }) => {
   const generateId = () => Math.random().toString(36).slice(2);
 
   useEffect(() => {
-    setTasks([...getTask(), ...tasks]);
+    setTasks([...getTask().reverse(), ...tasks]);
   }, []);
 
   const addTask = () => {
-    setToggler(toggler == "hidden" ? "visible" : "hidden");
-    saveTask({ id: generateId(), task: input, content: content, time: time() });
-    setTasks([{ task: input, content: content, time: time() }, ...tasks]);
+    input &&
+      (content && setToggler(toggler == "hidden" ? "visible" : "hidden"),
+      saveTask({
+        id: generateId(),
+        task: input,
+        content: content,
+        time: time(),
+      }),
+      setTasks([{ task: input, content: content, time: time() }, ...tasks]));
   };
 
   return (
@@ -106,35 +112,36 @@ const NewTaskContainer = ({ setTasks, tasks }) => {
                 onClick={() => {
                   setToggler(toggler == "hidden" ? "visible" : "hidden");
                 }}
+                title={toggler == "visible" ? "Hide Editor" : "Visible Editor"}
                 className="text-2xl me-3 bg-slate-500 rounded shadow px-2 text-slate-900 hover:bg-slate-800 hover:text-slate-400 cursor-pointer"
               >
                 <ion-icon
                   name={
-                    toggler == "hidden"
-                      ? "chevron-up-outline"
-                      : "chevron-down-outline"
+                    toggler == "hidden" ? "chevron-up-outline" : "close-outline"
                   }
                 ></ion-icon>
               </span>
               <input
+                title="Massage Gemini AI"
                 type="text"
                 name="username"
                 id="username"
                 autoComplete="off"
                 className="bg-slate-700  outline-none min-w-[100%]  cursor-text text-white"
-                placeholder="Massage Gemini AI"
+                placeholder="Massage Gemini Storage"
                 value={input}
                 onInput={inputTask}
               />
             </div>
             <span
+              title="Send"
               onClick={() => {
                 addTask();
                 setInput("");
               }}
               className="text-2xl bg-slate-500 rounded shadow px-2 text-slate-900 hover:bg-slate-800 hover:text-slate-400 cursor-pointer"
             >
-              <ion-icon name="add-outline"></ion-icon>
+              <ion-icon name="send-outline"></ion-icon>
             </span>
           </div>
         </form>
@@ -143,29 +150,38 @@ const NewTaskContainer = ({ setTasks, tasks }) => {
   );
 };
 
+const Single = ({ showTask }) => {
+  return (
+    <div className="mt-4 w-[100%] mx-auto">
+      <div className="flex items-center mb-1">
+        <span className=" text-white text-2xl me-3 pt-2 bg-green-600 px-2 shadow  rounded-full ">
+          <ion-icon name="flower-outline"></ion-icon>
+        </span>
+        <div
+          title="Task Name"
+          className="text-slate-100 rounded-0 min-w-[80%]  font-extrabold text-xl heading capitalize"
+        >
+          {showTask.task}
+        </div>
+      </div>
+      <div
+        title="Task Content"
+        className="mt-3 text-slate-300 output overflow-y-scroll h-[65vh]"
+        dangerouslySetInnerHTML={{ __html: showTask.content }}
+      ></div>
+    </div>
+  );
+};
+
 const TaskContainer = ({ showTask }) => {
   return (
-    <section className="rounded h-[73vh] ">
-      <div className="mt-4">
-        <div className="flex items-center mb-1">
-          <span className=" text-white text-2xl me-3 bg-green-600 px-2 shadow pb-1 rounded-full ">
-            <ion-icon name="flower-outline"></ion-icon>
-          </span>
-          <b className="text-slate-100  font-extrabold text-xl heading capitalize">
-            {showTask.task}
-          </b>
-        </div>
-        <div
-          className="mt-3 text-slate-300 output overflow-y-scroll h-[65vh]"
-          onChange={(e) => {}}
-          dangerouslySetInnerHTML={{ __html: showTask.content }}
-        ></div>
-      </div>
+    <section className="rounded h-[75vh]">
+      {showTask.length != 0 ? <Single showTask={showTask} /> : <Default />}
     </section>
   );
 };
 
-const Header = ({ toggleSidebarHandler, toggleSidebar }) => {
+const Header = ({ toggleSidebarHandler, toggleSidebar, setShowTask }) => {
   return (
     <header className="bg-slate-900 py-1 w-full shadow-lg">
       <div className="flex justify-between items-center w-[90%] mx-auto">
@@ -174,12 +190,17 @@ const Header = ({ toggleSidebarHandler, toggleSidebar }) => {
             toggleSidebarHandler();
           }}
           className="text-2xl text-slate-300 cursor-pointer hover:text-slate-400"
+          title="Menu"
         >
           <ion-icon name="menu-outline"></ion-icon>
         </span>
         <div className="text-center py-1">
-          <b className="text-slate-100 block mb-0">Gemini Storage</b>
-          <small className="mt-0 text-slate-400 font-bold">Version 3.5</small>
+          <b className="text-slate-100 block mb-0" title="Gemini Storage">
+            Gemini Storage
+          </b>
+          <small className="mt-0 text-slate-400 font-bold" title="Version 3.5">
+            Version 3.5
+          </small>
         </div>
         <span
           onClick={() => {
@@ -190,7 +211,11 @@ const Header = ({ toggleSidebarHandler, toggleSidebar }) => {
           className="text-2xl text-slate-300 cursor-pointer hover:text-slate-400"
         >
           <ion-icon
+            onClick={() => {
+              setShowTask([]);
+            }}
             name={toggleSidebar ? "close-outline" : "create-outline"}
+            title={toggleSidebar ? "Close" : "Create"}
           ></ion-icon>
         </span>
       </div>
@@ -204,15 +229,18 @@ const Container = ({
   tasks,
   toggleSidebarHandler,
   toggleSidebar,
+  inputRef,
+  setShowTask,
 }) => {
   return (
     <main className="relative mx-auto">
       <Header
         toggleSidebarHandler={toggleSidebarHandler}
         toggleSidebar={toggleSidebar}
+        setShowTask={setShowTask}
       />
       <TaskContainer showTask={showTask} />
-      <NewTaskContainer tasks={tasks} setTasks={setTasks} />
+      <NewTaskContainer tasks={tasks} setTasks={setTasks} inputRef={inputRef} />
     </main>
   );
 };
