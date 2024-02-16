@@ -99,7 +99,7 @@ const NewTaskContainer = ({ setTasks, tasks, inputRef }) => {
       <Editor setContent={setContent} toggler={toggler} />
       <div className="w-[100%] p-2 border border-slate-600 bg-slate-700 rounded-lg shadow-lg mt-4 mx-auto">
         <form
-          className="w-[100%]"
+          className="min-w-[100%]"
           onSubmit={(e) => {
             e.preventDefault();
             addTask();
@@ -127,7 +127,7 @@ const NewTaskContainer = ({ setTasks, tasks, inputRef }) => {
                 name="username"
                 id="username"
                 autoComplete="off"
-                className="bg-slate-700  outline-none min-w-[100%]  cursor-text text-white"
+                className="bg-slate-700  outline-none w-[100%]  cursor-text text-white"
                 placeholder="Massage Gemini Storage"
                 value={input}
                 onInput={inputTask}
@@ -175,7 +175,7 @@ const Single = ({ showTask }) => {
 
 const TaskContainer = ({ showTask }) => {
   return (
-    <section className="rounded h-[75vh]">
+    <section className="rounded h-[70vh]">
       {showTask.length != 0 ? <Single showTask={showTask} /> : <Default />}
     </section>
   );

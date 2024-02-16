@@ -40,7 +40,7 @@ const Tasks = ({
   };
   let time = "";
   return (
-    <ul className="list-none mt-3 h-[75vh] overflow-scroll">
+    <ul className="list-none mt-3 h-[70vh] overflow-scroll">
       {tasks.map((task, index) => (
         <React.Fragment key={index}>
           {task.time !== time && (
