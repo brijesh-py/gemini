@@ -1,0 +1,37 @@
+aside {
+    height: 100vh;
+    overflow-x: visible;
+    overflow-y: scroll;
+    width: 300px;
+}
+
+aside li span {
+    text-overflow: ellipsis;
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    height: fit-content;
+}
+
+aside ul li .tools {
+    visibility: hidden;
+}
+
+aside ul li:hover .tools {
+    visibility: visible;
+}
+
+aside div ion-icon:first-child {
+    margin-right: 5px;
+}
+
+@media (max-width:680px) {
+    aside {
+        min-width: 40%;
+        max-width: 250px;
+        position: absolute;
+        top: 0px;
+        left: -100%;
+        z-index: 100;
+    }
+}
